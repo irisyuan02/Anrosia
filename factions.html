@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王室與貴族 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 基礎設定與導覽列 (完全維持與首頁一致)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+            overflow-y: scroll; /* 強制顯示垂直滾動條，消除頁面跳動 */
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+/* =========================================
+           2. 家族底圖與互動點擊區塊 (絕對定位版)
+           ========================================= */
+        .board-section {
+            max-width: 1400px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .board-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        /* 覆蓋在圖片上的點擊圖層 */
+        .click-grid {
+            position: absolute;
+            top: 0;
+            left: 20px; 
+            right: 20px;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        /* 每個家族的互動區塊共用設定 */
+        .faction-zone {
+            position: absolute; /* 讓每個區塊可以獨立設定位置 */
+            cursor: pointer; 
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            border-radius: 145px 145px 0 0; /* 配合圖片的拱門設計，讓上方呈現圓角 */
+            
+            /* 🔴 【校準模式】把下面這行最前面的 /* 刪掉，就會出現紅框讓你對準圖片！對準後再加回 /* 隱藏起來 */
+            /* border: 2px solid red; */
+        }
+
+        /* 滑鼠懸停時的發光特效 */
+        .faction-zone:hover {
+            background: rgba(207, 168, 106, 0.08);
+            box-shadow: inset 0 0 50px rgba(207, 168, 106, 0.4);
+        }
+
+        /* =========================================
+           🎯 點擊區塊「精細微調」控制面板
+           ========================================= */
+        /* left 代表「從左邊算起距離多遠開始」； width 代表「這個框框有多寬」 */
+        
+        .zone-veyre   { left: 1%; width: 18.5%;top: 6%;  bottom: 5%; }    /* 左1: 維雷 */
+        .zone-cassiel { left: 19.7%;  width: 18.1%; top: 6%;  bottom: 5%; }  /* 左2: 卡西爾 */
+        .zone-royal   { left: 37.95%; width: 23.8%; top: 2%;  bottom: 5%; } /* 中間: 王室 (通常佔比最寬) */
+        .zone-moriah  { left: 61.9%;  width: 18.3%; top: 6%;  bottom: 5%; }  /* 右2: 莫里亞 */
+        .zone-sylvius { left: 80.4%; width: 18.8%; top: 6%;  bottom: 5%; }   /* 右1: 西爾維斯 */
+
+        @media (max-width: 900px) {
+            .click-grid { display: none; }
+            .board-section::after {
+                content: "請使用電腦螢幕以獲得最佳的互動圖文瀏覽體驗。";
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                color: #cfa86a;
+            }
+        }
+
+        /* =========================================
+           3. 彈窗 (Modal) 樣式設計
+           ========================================= */
+        .modal-overlay {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); /* 半透明黑底 */
+            backdrop-filter: blur(5px); /* 背景模糊化，增加質感 */
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; /* 用於淡入動畫 */
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-box {
+            background-color: #12141a;
+            background-image: radial-gradient(circle at center, #1b1e25 0%, #12141a 100%);
+            border: 1px solid rgba(207, 168, 106, 0.4);
+            border-radius: 8px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(207, 168, 106, 0.1);
+            max-width: 650px;
+            width: 90%;
+            max-height: 85vh; /* 防止內容太長超出螢幕 */
+            overflow-y: auto; /* 內容過長可滾動 */
+            padding: 40px;
+            position: relative;
+            transform: translateY(20px); /* 用於滑出動畫 */
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.show .modal-box {
+            transform: translateY(0);
+        }
+
+        /* 關閉按鈕 (右上角的 X) */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #8a8174;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover { color: #cfa86a; }
+
+        /* 彈窗內容文字排版 */
+        .modal-title {
+            color: #cfa86a;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 5px;
+            text-align: center;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(207, 168, 106, 0.2);
+            padding-bottom: 15px;
+        }
+
+        .modal-motto {
+            text-align: center;
+            font-style: italic;
+            color: #8a8174;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .modal-meta {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border-left: 3px solid #cfa86a;
+        }
+
+        .modal-meta p { margin: 5px 0; font-size: 0.95rem; }
+        .modal-meta span { color: #cfa86a; font-weight: bold; }
+
+        .modal-body h4 {
+            color: #e6cead;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-body h4::before {
+            content: "⬩";
+            color: #cfa86a;
+            margin-right: 8px;
+        }
+
+        .modal-body p {
+            text-align: justify;
+            color: #c4b5a2;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* 捲軸美化 (針對彈窗內部) */
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .modal-box::-webkit-scrollbar-thumb { background: rgba(207, 168, 106, 0.3); border-radius: 3px; }
+        .modal-box::-webkit-scrollbar-thumb:hover { background: rgba(207, 168, 106, 0.6); }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html" class="active">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="board-section">
+        <img src="factions.jpg" class="board-img" alt="王室與四大家族家徽">
+        
+        <div class="click-grid">
+            <div class="faction-zone zone-veyre" onclick="openModal('veyre')"></div>     
+            <div class="faction-zone zone-cassiel" onclick="openModal('cassiel')"></div>   
+            <div class="faction-zone zone-royal" onclick="openModal('royal')"></div>     
+            <div class="faction-zone zone-moriah" onclick="openModal('moriah')"></div>    
+            <div class="faction-zone zone-sylvius" onclick="openModal('sylvius')"></div>   
+        </div>
+    </div>
+
+    <div id="factionModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modalContent">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // 準備好五大勢力的文字資料庫
+        const factionData = {
+            'royal': {
+                title: "安羅西亞王室",
+                motto: "「 日光所及，皆為王土 」",
+                emblem: "曜日王冠與交劍",
+                color: "耀金與正紅",
+                symbol: "圖騰中央是一輪散發著十二道光芒的金色烈日，上方懸浮著代表王權的皇冠，背後交叉著兩把象徵征服的長劍。佩戴這枚徽章的人代表著無法逾越的階級頂點，但也同時暗示著在這耀眼的陽光下，隱藏著王室吞噬一切的傲慢與極權。",
+                logicTitle: "操弄平衡的「冷血莊家」",
+                logicDesc: "身為統治安羅西亞的至高權力中心，王室表面上沐浴在三十年和平的極致奢靡與神聖光環中，實際上卻是一座毫無親情可言的冷酷政治企業。他們深知四大頂級貴族各自掌握著足以傾覆國家的力量，因此王室的生存邏輯就是「極致的制衡與分化」。<br><br>國王如同一位高高在上的看客，刻意放任甚至欣賞貴族間的明爭暗鬥；王后與子嗣們則將自身的婚姻與繼承權，化為最高級的政治誘餌。他們用虛榮將上流社會打造成角鬥場，只要底下的權力鬥爭永不休止，沒有任何一家能徹底做大，王室就能永遠安穩地吸食著全大陸的財富與野心。"
+            },
+            'veyre': {
+                title: "維雷家族 (Veyre)",
+                motto: "「 真理沉睡，唯吾掌鑰 」",
+                emblem: "秘銀鑰與星軌",
+                color: "夜幕藍與秘銀",
+                symbol: "家徽主體是一把古老精緻的秘銀鑰匙，周圍環繞著精密咬合、層層交疊的銀色星軌。這交錯的星軌暗喻著維雷家族將全大陸的地緣政治、跨國資金流與機密情報，皆視為如天體般精密運轉的系統。看見這枚家徽，就等於看見了「無法被打破的絕對防禦」與掌控全局的最高棋手。",
+                logicTitle: "王國的「絕對總開關」",
+                logicDesc: "身為手握跨國資本、機密檔案與外交樞紐的頂級門閥，維雷家族早已超脫了王都內耗的泥淖。他們深知真正的統治者從不親自下場廝殺，因此刻意與社交圈的「茶藝宮鬥」保持高冷且優雅的距離，不屑參與爭權的泥巴戰。<br><br>他們之所以能如此傲慢，是因為悄悄掐住了所有人的命脈——軍隊的外交緩衝、商會的跨國資金流，以及王室與教廷最致命的黑歷史。他們不需要拔劍，因為他們隨時能切斷其他勢力的生存底線，是安羅西亞真正的幕後執棋者。"
+            },
+            'cassiel': {
+                title: "卡西爾家族 (Cassiel)",
+                motto: "「 刃收於鞘，血誓不滅 」",
+                emblem: "斷劍與守望的霜狼",
+                color: "寒鐵灰與暗血紅",
+                symbol: "圖騰是一頭盤踞在巨大塔盾上的北方霜狼，腳下踩著一把折斷的巨劍。在一般貴族眼中，這把「斷劍」象徵著家族在和平年代主動解除武裝的憨厚表象；但自己人知道，霜狼半閉著的眼睛並沒有睡著，牠隨時準備在王國遭遇危機（或遭到背叛）時，用最原始的獠牙撕裂敵人的咽喉。這是一個將極致武力隱藏在隱忍之下的鐵血圖騰。",
+                logicTitle: "和平年代的「收鞘之劍」",
+                logicDesc: "因為身處和平年代，國防預算不斷被削減拿去辦舞會，軍人往往被上流社交圈視為「不懂風雅的粗人」。<br><br>卡西爾家族深知「功高震主」與「武將干政」的致命危險，所以他們刻意迎合這種刻板印象。整個家族對外都表現出一副「四肢發達、頭腦簡單、只懂揮劍不懂算計」的模樣，藉由裝笨來讓國王安心，並讓其他貴族輕敵。"
+            },
+            'moriah': {
+                title: "莫里亞家族 (Moriah)",
+                motto: "「 萬物皆有其價 」",
+                emblem: "沉船金幣與深海觸手",
+                color: "奢靡紫與耀金",
+                symbol: "這是一枚極度華麗且充滿侵略性的家徽。圖騰中央是一枚閃閃發光的古代金幣，邊緣被幾條從深淵探出的海怪觸手死死纏繞。只要被這枚徽章盯上的獵物，最終都會被拖入由債務與慾望編織的無底深淵。",
+                logicTitle: "用金幣鑄造的「新王權」",
+                logicDesc: "莫里亞家族的觸手不僅掌握著大陸最奢華的表面財富，更深深扎根於東方海域的走私網、高利貸陷阱與黑市情報之中。<br><br>因為是後來才受封的新貴，他們在傳統老貴族眼中永遠帶著洗不掉的銅臭味與暴發戶的粗鄙。老貴族們在白天鄙視他們的血統，不允許他們坐上主桌；但到了夜晚，卻又不得不為了維持奢靡生活，低聲下氣地向莫里亞家族借錢。"
+            },
+            'sylvius': {
+                title: "西爾維斯家族 (Sylvius)",
+                motto: "「 秩序即是救贖 」",
+                emblem: "無影天平與泣血荊棘",
+                color: "純淨白與冰霜藍",
+                symbol: "家徽的中心是一座絕對平衡的白銀天平，支柱是一把朝下的裁決之劍。整座天平被帶刺的荊棘緊緊纏繞，滴落著血珠。這象徵著神聖的法律是完美無瑕的，而任何罪惡都必須經歷痛苦的審判與鮮血的淨化。這枚徽章等同於一道隨時可能落下、將人精神凌遲的無情枷鎖。",
+                logicTitle: "王國的「大腦與枷鎖」",
+                logicDesc: "在三十年的和平年代，人類的私慾與貪婪無限膨脹，而這正是西爾維斯家族最強大的養分。他們的生存邏輯是「將道德與律法武器化，用罪惡感與恐懼來統治人心」。<br><br>他們把持著最高法院、皇家學院與國教樞機院，編織出一張名為「規矩」的密網。任何人想要在王都立足，都必須經過他們在學術與信仰上的「認證」。"
+            }
+        };
+
+        const modalOverlay = document.getElementById('factionModal');
+        const modalContent = document.getElementById('modalContent');
+
+        // 打開彈窗的函數
+        function openModal(factionKey) {
+            const data = factionData[factionKey];
+            
+            // 將資料組合成 HTML 放進彈窗裡
+            modalContent.innerHTML = `
+                <h2 class="modal-title">${data.title}</h2>
+                <div class="modal-motto">${data.motto}</div>
+                <div class="modal-meta">
+                    <p><span>家徽圖騰：</span> ${data.emblem}</p>
+                    <p><span>代表主色：</span> ${data.color}</p>
+                </div>
+                <div class="modal-body">
+                    <h4>象徵意義</h4>
+                    <p>${data.symbol}</p>
+                    <h4>${data.logicTitle}</h4>
+                    <p>${data.logicDesc}</p>
+                </div>
+            `;
+            
+            // 顯示彈窗
+            modalOverlay.classList.add('show');
+        }
+
+        // 關閉彈窗的函數
+        function closeModal() {
+            modalOverlay.classList.remove('show');
+        }
+
+        // 點擊彈窗外面(黑底區域)也能關閉
+        modalOverlay.addEventListener('click', function(e) {
+            if(e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    </script>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>

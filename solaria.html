@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>耀日大陸 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 基礎設定與導覽列 (完全維持與首頁一致)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+            overflow-y: scroll; /* 強制顯示垂直滾動條，消除頁面跳動 */
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: #8a8174; 
+            font-size: 0.85rem; 
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* =========================================
+           2. 國家圖片層疊區塊 (Plate Overlay)
+           ========================================= */
+        .plate-section {
+            max-width: 1400px;
+            margin: 0 auto 50px auto;
+            padding: 0 20px;
+            position: relative; 
+        }
+
+        .plate-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .plate-overlay-grid {
+            position: absolute;
+            top: 0;
+            left: 20px; 
+            right: 20px;
+            bottom: 0;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            z-index: 10;
+        }
+
+        .region-column {
+            position: relative;
+            padding: 5%; 
+        }
+        
+        .region-title {
+            display: block;
+            border-bottom: 1px solid rgba(207, 168, 106, 0.3);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,1);
+        }
+
+        .region-desc {
+            position: absolute;
+            text-align: justify;
+            line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0,0,0,1); 
+        }
+
+        .specialty-title {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .specialty-list {
+            position: absolute;
+            left: 5%;
+            right: 5%;
+        }
+
+        .specialty-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6%;
+        }
+
+        .icon-spacer {
+            flex-shrink: 0; 
+            height: 40px; 
+        }
+
+        .specialty-text {
+            line-height: 1.4;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+        }
+
+        .specialty-text strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 900px) {
+            .plate-overlay-grid { display: none; }
+            .plate-section::after {
+                content: "請使用電腦螢幕以獲得最佳的五大國家圖文瀏覽體驗。";
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                color: #cfa86a;
+            }
+        }
+
+        /* =========================================
+           🛠️ 國家區塊「個別精細微調」控制面板
+           ========================================= */
+
+        /* 👑 【第 1 區：安羅西亞王國】 */
+        .block-1 { transform: translate(0px, 0px); } /* 整個區塊平移。(第一個數字控制左右，負數往左；第二個控制上下，負數往上) */
+        .block-1 .region-title { font-size: 1.3rem; color: #cfa86a; font-weight: bold; text-align: center; }
+        .block-1 .region-desc { top: 43%; font-size: 0.9rem; width: 93%; }
+        .block-1 .specialty-title { top: 68.3%; color: #cfa86a; font-size: 1.0rem; width: 95%; }
+        .block-1 .specialty-list { top: 73.5%; right: 0%;} 
+        .block-1 .icon-spacer { width: 38%; }
+        .block-1 .specialty-text { font-size: 0.8rem; color: #c4b5a2; }
+        .block-1 .specialty-text strong { color: #cfa86a; }
+
+        /* 🦅 【第 2 區：法爾科亞帝國】 */
+        .block-2 { transform: translate(0px, 0px); }
+        .block-2 .region-title { font-size: 1.3rem; color: #cfa86a; font-weight: bold; text-align: center; }
+        .block-2 .region-desc { top: 43%; font-size: 0.9rem; width: 93%; }
+        .block-2 .specialty-title { top: 68.3%; color: #cfa86a; font-size: 1.0rem; width: 95%; }
+        .block-2 .specialty-list { top: 73.5%; right: 3%;}
+        .block-2 .icon-spacer { width: 38%; }
+        .block-2 .specialty-text { font-size: 0.8rem; color: #c4b5a2; }
+        .block-2 .specialty-text strong { color: #cfa86a; }
+
+        /* 🐺 【第 3 區：瓦爾剛公國】 */
+        .block-3 { transform: translate(0px, 0px); }
+        .block-3 .region-title { font-size: 1.3rem; color: #cfa86a; font-weight: bold; text-align: center; }
+        .block-3 .region-desc { top: 43%; font-size: 0.9rem; width: 90%; }
+        .block-3 .specialty-title { top: 68.3%; color: #cfa86a; font-size: 1.0rem; width: 95%; }
+        .block-3 .specialty-list { top: 73.0%; right: 5%; }
+        .block-3 .icon-spacer { width: 38%; }
+        .block-3 .specialty-text { font-size: 0.8rem; color: #c4b5a2; }
+        .block-3 .specialty-text strong { color: #cfa86a; }
+
+        /* 🔱 【第 4 區：瑟倫海商聯盟】 */
+        .block-4 { transform: translate(-9.6px, 0px); }
+        .block-4 .region-title { font-size: 1.3rem; color: #cfa86a; font-weight: bold; text-align: center; }
+        .block-4 .region-desc { top: 43%; font-size: 0.9rem; width: 93%; }
+        .block-4 .specialty-title { top: 68.3%; color: #cfa86a; font-size: 1.0rem; width: 95%; }
+        .block-4 .specialty-list { top: 73.5%; right: 5%; }
+        .block-4 .icon-spacer { width: 40%; }
+        .block-4 .specialty-text { font-size: 0.8rem; color: #c4b5a2; }
+        .block-4 .specialty-text strong { color: #cfa86a; }
+
+        /* ☀️ 【第 5 區：薩拉曼聯合綠洲】 */
+        .block-5 { transform: translate(-10px, 0px); }
+        .block-5 .region-title { font-size: 1.3rem; color: #cfa86a; font-weight: bold; text-align: center; }
+        .block-5 .region-desc { top: 43%; font-size: 0.9rem; }
+        .block-5 .specialty-title { top: 68.3%; color: #cfa86a; font-size: 1.0rem; width: 95%; }
+        .block-5 .specialty-list { top: 73%; right: 4%;}
+        .block-5 .icon-spacer { width: 37%; }
+        .block-5 .specialty-text { font-size: 0.8rem; color: #c4b5a2; }
+        .block-5 .specialty-text strong { color: #cfa86a; }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html" class="active">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="plate-section">
+        <img src="Country.jpg" class="plate-bg" alt="耀日大陸五大國家">
+        
+        <div class="plate-overlay-grid">
+            
+            <div class="region-column block-1">
+                <div class="region-desc">
+                    <span class="region-title">安羅西亞王國</span>
+                    位於耀日大陸的最核心地帶，，氣候宜人、土壤肥沃。國都是被花海淹沒的奢華之城。<br>
+                    雖被視為只會辦茶會的軟弱貴族，但憑藉深不可測的財力與貿易封鎖力，無人敢輕易撕毀和平條約。
+                </div>
+                <div class="specialty-title">特產與戰略價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>流行與文明標準</strong>將他國原料轉為頂級藝術輸出；不符其審美即被視為落伍，形成無形的文化侵略。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>茶藝外交與聯姻</strong>輸出受過嚴格禮儀與心理戰訓練的貴族，以高明手腕從內部滲透他國權力格局。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-2">
+                <div class="region-desc">
+                    <span class="region-title">法爾科亞帝國</span>
+                    隔著西境群山與安羅西亞接壤。幅員遼闊，為大陸上歷史最悠久的軍事與魔法工業帝國。<br>
+                    三十年前與安羅西亞簽訂了停戰協定，雙方目前處於互相鄙視又必須合作的冷戰狀態。
+                </div>
+                <div class="specialty-title">特產與戰略價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>魔導與精密機關</strong>全大陸唯一重型魔法工業出口國。從攻城械到微型自爆齒輪，技術領先一個世代。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>頂級紅酒</strong>出產的紅酒超越飲品範疇，是皇室間最高級的外交餽贈，甚至能換取邊境小城。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-3">
+                <div class="region-desc">
+                    <span class="region-title">瓦爾剛公國</span>
+                    位於北方防線外，由凍土與冰川組成的嚴酷之地。人民剽悍，單兵戰鬥力極強。<br>
+                    每逢入冬便對南方構成武力威脅；各國黑市商人也會鋌而走險，走私糧食換取戰利品。
+                </div>
+                <div class="specialty-title">特產與戰略價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>冷鍛寒鐵</strong>唯一對魔法具絕對抗性的稀有金屬，是打造刺穿法師護盾兵器的最高級戰略物資。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>極地魔物素材</strong>高階獸核是陣法不可或缺的能量源；雪狼皮草更是貴族彰顯武德與財力的禦寒神物。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-4">
+                <div class="region-desc">
+                    <span class="region-title">瑟倫海商聯盟</span>
+                    位於東方海域外的群島，由商業城邦組成。壟斷海運貿易霸權，握有絕對定價權。<br>
+                    表面簽署自由貿易協定，私底下卻長期資助海盜劫掠他國商船，是安羅西亞的最大對手。
+                </div>
+                <div class="specialty-title">特產與戰略價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>鮫絲與深海珍珠</strong>壟斷通往淵海的航線，鮫絲則是被指定為皇室加冕御用布料。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>致幻迷香與毒藥</strong>無色無味的毒藥是各國暗殺首選。「只要商船靠岸，就有王儲準備病故。」</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-5">
+                <div class="region-desc">
+                    <span class="region-title">薩拉曼聯合綠洲</span>
+                    越過赤色峽谷的廣袤沙漠神權國家。擁有狂熱的太陽神信仰，教義上與他國水火不容。<br>
+                    掌握稀缺古代遺物與煉金資源，在國際上保持著神秘且不可忽視的中立地位。
+                </div>
+                <div class="specialty-title">特產與戰略價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>遺物與煉金原礦</strong>埋藏上古魔法卷軸與特殊礦石。各國為爭開採權，常在綠洲邊緣進行代理人戰爭。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>純淨黃金</strong>提煉的黃金擁有最高純度，是國際貨幣本位制基礎。若減少出口，全大陸物價將隨之震盪。</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主要角色 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 繼承首頁的基礎設定與導覽列 (完全維持與首頁一致)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+            overflow-y: scroll; /* 強制顯示垂直滾動條，消除頁面跳動 */
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+        /* =========================================
+           2. 角色展示區域 (Character Card Layout)
+           ========================================= */
+        .character-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 100px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 自動適應不同寬度，最少300px */
+            gap: 40px; /* 卡片之間的距離 */
+        }
+
+        .character-card {
+            background: rgba(25, 28, 36, 0.6);
+            border: 1px solid rgba(207, 168, 106, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .character-card:hover {
+            border-color: rgba(207, 168, 106, 0.6);
+            transform: translateY(-5px); /* 懸停時稍微往上浮 */
+        }
+
+        .character-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .character-info {
+            padding: 20px;
+        }
+
+        .character-card h3 {
+            font-size: 1.5rem;
+            color: #cfa86a;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .character-card ul {
+            list-style-type: none; /* 移除默認符號 */
+            padding: 0;
+            margin: 0;
+        }
+
+        .character-card li {
+            font-size: 0.95rem;
+            color: #c4b5a2;
+            line-height: 1.6;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .character-card li::before {
+            content: "⬩";
+            color: #cfa86a;
+            margin-right: 8px;
+            flex-shrink: 0; /* 確保留白不會被文字壓縮 */
+        }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html" class="active">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="character-section">
+
+        <div class="character-card">
+            <img src="Orpheus Veyre.jpg" alt="奧菲斯·維雷">
+            <div class="character-info">
+                <h3>奧菲斯·維雷</h3>
+                <ul>
+                    <li>安羅西亞外交防務特使，隸屬王室直轄情報機構</li>
+                    <li>29歲、193cm</li>
+                    <li>微捲黑短髮、琥珀灰眸</li>
+                    <li>穿著低調考究</li>
+                    <li>氣質如月夜的微風般溫柔，卻令人無法忽視</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <img src="Izel Anrosia.jpg" alt="伊澤爾·安羅西亞">
+            <div class="character-info">
+                <h3>伊澤爾·安羅西亞</h3>
+                <ul>
+                    <li>大王子（王儲）</li>
+                    <li>26歲、188cm</li>
+                    <li>金微捲長髮（常束在腦後）、藍眸</li>
+                    <li>喜穿純白搭配金邊的皇家禮服</li>
+                    <li>笑容溫暖和煦、自帶打光效果、舉手投足像教科書般完美</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <img src="Celian Anrosia.jpg" alt="賽利安·安羅西亞">
+            <div class="character-info">
+                <h3>賽利安·安羅西亞</h3>
+                <ul>
+                    <li>二王子</li>
+                    <li>21歲、183cm</li>
+                    <li>黑長髮（常束在腦後）、灰眸</li>
+                    <li>身形略顯單薄、總穿深色高領的修身禮服</li>
+                    <li>習慣性微咳、眼神憂鬱、像易碎品</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <img src="Ryan Cassiel.jpg" alt="萊恩·卡西爾">
+            <div class="character-info">
+                <h3>萊恩·卡西爾</h3>
+                <ul>
+                    <li>近衛騎士團團長</li>
+                    <li>27歲、190cm</li>
+                    <li>紅棕短髮、綠眸</li>
+                    <li>眼神像大型犬般專注</li>
+                    <li>常穿著輕便的練功服或近衛騎士團制服</li>
+                    <li>身上帶陽光與皮革的氣味</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <img src="Valentine Moriah.jpg" alt="瓦倫汀·莫里亞">
+            <div class="character-info">
+                <h3>瓦倫汀·莫里亞</h3>
+                <ul>
+                    <li>商會實際掌權人</li>
+                    <li>25歲、184cm</li>
+                    <li>淺銀色微捲長髮（隨意披散或用絲帶半綁）、紫羅蘭眸</li>
+                    <li>穿著最昂貴、顏色最騷包的訂製服</li>
+                    <li>永遠掛著玩世不恭的笑意</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <img src="Alaric Sylvius.jpg" alt="阿拉里克·西爾維斯">
+            <div class="character-info">
+                <h3>阿拉里克·西爾維斯</h3>
+                <ul>
+                    <li>最高法庭首席大法官、樞機院代主教</li>
+                    <li>28歲、186cm</li>
+                    <li>深藍短髮、深藍眸</li>
+                    <li>永遠穿著禁慾系高領法袍或樞機院制服、戴單片銀框眼鏡</li>
+                    <li>氣質冷厲、隨身攜帶法典</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>
