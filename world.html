@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界觀 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 繼承首頁的基礎設定與導覽列 (完全維持原樣)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+	    overflow-y: scroll; /* 加上這行：強制顯示垂直滾動條，消除頁面跳動 */
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; /* 確保與首頁高度一致 */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+        /* =========================================
+           2. 世界地圖區塊
+           ========================================= */
+        .map-section {
+            max-width: 1200px;
+            margin: 0 auto 80px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .map-section img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid #4a3e2e;
+        }
+
+        /* =========================================
+           3. 五大區域圖片層疊區塊 (Plate Overlay)
+           ========================================= */
+        .plate-section {
+            max-width: 1400px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+            position: relative; /* 建立相對定位，讓文字可以疊在圖上 */
+        }
+
+        .plate-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 文字疊加層的網格系統 */
+        .plate-overlay-grid {
+            position: absolute;
+            top: 0;
+            left: 20px; /* 扣除 padding */
+            right: 20px;
+            bottom: 0;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 切成均等的 5 個直列 */
+            z-index: 10;
+        }
+
+        .region-column {
+            position: relative;
+            padding: 5%; /* 避免文字貼著邊緣 */
+        }
+
+        /* 針對文字位置的微調 (你可以根據圖片實際比例修改這裡的百分比) */
+        
+        /* 區域介紹文字 (推測位於圖片中間偏下) */
+        .region-desc {
+            position: absolute;
+            top: 43%; /* 距離頂部的比例，數值越大越往下 */
+            left: 5%;
+            right: 5%;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            text-align: justify;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9); /* 加深陰影讓文字在任何背景都清楚 */
+        }
+
+        /* 專屬的大陸標題排版設定 */
+        .region-title {
+            color: #cfa86a; /* 標題顏色 */
+            text-align: center;
+            font-size: 1.3rem; /* 標題字體大小 (原本是1rem，我幫你調大一點，你可以自由修改數字) */
+            font-weight: bold; /* 粗體 */
+            letter-spacing: 1px; /* 字元間距，讓字不要擠在一起 */
+            display: block; /* 讓標題自己獨立佔據一行 */
+            margin-bottom: 12px; /* 標題與下方敘述文字的距離 */
+            border-bottom: 1px solid rgba(207, 168, 106, 0.3); /* (選用) 在標題下方加一條淡淡的金線，增加質感 */
+            padding-bottom: 4px; /* 文字與底線的距離 */
+        }
+
+        /* 「特產與價值」五個字 (對準圖上的框框) */
+        .specialty-title {
+            position: absolute;
+            top: 67.5%; /* 控制文字與框框的上下對齊 */
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #cfa86a;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        /* 下方的特產清單區塊 */
+        .specialty-list {
+            position: absolute;
+            top: 72.5%; /* 距離頂部比例，控制特產介紹的起始高度 */
+            left: 10%;
+            right: 5%;
+        }
+
+        .specialty-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6%;
+        }
+
+        /* 這是預留給底圖「道具圖標」透出來的透明空間 */
+        .icon-spacer {
+            width: 35%; /* 如果圖片上的圖標比較寬，就把這個數字調大，文字就會往右擠 */
+            flex-shrink: 0; /* 確保留白不會被文字壓縮 */
+            height: 40px; 
+        }
+
+        /* 道具介紹文字 */
+        .specialty-text {
+            width: 65%;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #c4b5a2;
+        }
+
+        .specialty-text strong {
+            color: #cfa86a;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* 讓手機版也能清楚閱讀，將文字稍微放大並改成單行顯示 */
+        @media (max-width: 900px) {
+            .plate-overlay-grid {
+                /* 手機螢幕太窄，改成上下堆疊會比較好，但為了配合你的單張大圖，這裡維持原樣但隱藏重疊，這部分未來可做進階響應式設計 */
+                display: none; 
+            }
+            .plate-section::after {
+                content: "請使用電腦螢幕以獲得最佳的五大區域圖文瀏覽體驗。";
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                color: #cfa86a;
+            }
+        }
+        /* =========================================
+           🛠️ 五大區塊「個別精細微調」控制面板
+           ========================================= */
+
+        /* 🔴 【第 1 區：耀日大陸】 */
+        .block-1 {
+            transform: translate(1px, 0px); /* 整個區塊平移。(第一個數字控制左右，負數往左；第二個控制上下，負數往上) */
+        }
+        .block-1 .region-title {
+            font-size: 1.2rem;   /* 大陸標題大小 */
+            color: #cfa86a;      /* 大陸標題顏色 */
+        }
+        .block-1 .region-desc {
+            top: 45%;            /* 介紹文字的上下位置 (數字越大越往下) */
+            font-size: 0.85rem;  /* 介紹文字的大小 */
+            width: 93%;
+        }
+        .block-1 .specialty-title {
+            top: 67.2%;          /* 「特產與價值」五個字的上下位置 (用來精準對齊底圖的框) */
+            width: 105%;
+        }
+        .block-1 .specialty-list {
+            top: 72.8%;            /* 下方特產介紹整體的起始高度 */
+        }
+        .block-1 .icon-spacer {
+            width: 35%;          /* 道具圖標留白空間 (若文字蓋到圖片圖標，把數字調大，字就會往右移) */
+        }
+        .block-1 .specialty-text {
+            font-size: 0.8rem;   /* 特產介紹的文字大小 */
+        }
+
+        /* ☁️ 【第 2 區：浮空大陸】 */
+        .block-2 {
+            transform: translate(5px, 0px);
+        }
+        .block-2 .region-title {
+            font-size: 1.2rem;
+            color: #cfa86a; 
+        }
+        .block-2 .region-desc {
+            top: 45%; 
+            font-size: 0.85rem; 
+        }
+        .block-2 .specialty-title {
+            top: 67.3%; 
+            width: 110%;
+        }
+        .block-2 .specialty-list {
+            top: 73%; 
+        }
+        .block-2 .icon-spacer {
+            width: 33%; 
+        }
+        .block-2 .specialty-text {
+            font-size: 0.8rem; 
+        }
+
+        /* 🌊 【第 3 區：淵海大陸】 */
+        .block-3 {
+            transform: translate(0px, 0px);
+        }
+        .block-3 .region-title {
+            font-size: 1.2rem;
+            color: #cfa86a; 
+        }
+        .block-3 .region-desc {
+            top: 45%; 
+            font-size: 0.85rem; 
+        }
+        .block-3 .specialty-title {
+            top: 67.5%; 
+            width: 107%;
+        }
+        .block-3 .specialty-list {
+            top: 72.8%; 
+        }
+        .block-3 .icon-spacer {
+            width: 34%; 
+        }
+        .block-3 .specialty-text {
+            font-size: 0.8rem; 
+        }
+
+        /* 🌘 【第 4 區：黑曜大陸】 */
+        .block-4 {
+            /* 這裡保留了幫你往左推移的數值，你可微調 */
+            transform: translate(-3px, 0px); 
+        }
+        .block-4 .region-title {
+            font-size: 1.2rem;
+            color: #cfa86a; 
+        }
+        .block-4 .region-desc {
+            top: 45%; 
+            font-size: 0.85rem; 
+        }
+        .block-4 .specialty-title {
+            top: 67.5%; 
+            width: 105%;
+        }
+        .block-4 .specialty-list {
+            top: 73%; 
+        }
+        .block-4 .icon-spacer {
+            width: 32%; 
+        }
+        .block-4 .specialty-text {
+            font-size: 0.8rem; 
+        }
+
+        /* 🌿 【第 5 區：幻森大陸】 */
+        .block-5 {
+            /* 這裡保留了往左推移的數值，最後一個通常誤差最大 */
+            transform: translate(-5px, 0px); 
+        }
+        .block-5 .region-title {
+            font-size: 1.2rem;
+            color: #cfa86a; 
+        }
+        .block-5 .region-desc {
+            top: 45%; 
+            font-size: 0.85rem; 
+            width: 93%;
+        }
+        .block-5 .specialty-title {
+            top: 67.5%; 
+            width: 105%;
+        }
+        .block-5 .specialty-list {
+            top: 72.8%; 
+        }
+        .block-5 .icon-spacer {
+            width: 31%; 
+        }
+        .block-5 .specialty-text {
+            font-size: 0.8rem; 
+        }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html" class="active">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+
+
+    <div class="plate-section">
+        <img src="plate.jpg" class="plate-bg" alt="五大區域介紹">
+        
+        <div class="plate-overlay-grid">
+            
+            <div class="region-column block-1">
+                <div class="region-desc">
+                    <span class="region-title">耀日大陸｜索拉利亞</span>
+                    位於世界中心，有最充沛的日照與最穩定的魔力磁場，是被諸神眷顧的豐饒之土。<br>
+                    住民為人類，壽命如朝露般短暫，但擁有極強的繁殖力、適應力、野心與狡詐。
+                </div>
+                <div class="specialty-title">特產與價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>情緒與靈魂</strong>人類那強烈的愛恨、恐懼與慾望，是黑曜與淵海最渴望的精神美食與通貨。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>虛偽藝術</strong>將禮儀、時尚、奢糜發展到巔峰，向世界輸出名為「文明」的華麗謊言。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-2">
+                <div class="region-desc">
+                    <span class="region-title">浮空大陸｜艾瑟羅</span>
+                    極高空的破碎列島，由魔力磁場托起，流淌反重力瀑布，建築由白曜石生長而成。<br>
+                    住民為蒼空遺族，壽命極長，擁有極高魔法文明，傲慢且潔癖，嚴格閉關鎖國。
+                </div>
+                <div class="specialty-title">特產與價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>雲織絲</strong>輕若無物、能散發微光的布料，是階級與財力的終極證明。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>星淚晶</strong>能瞬間治癒或達到極致美容的寶石，是貴族夢寐以求的神物。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-3">
+                <div class="region-desc">
+                    <span class="region-title">淵海大陸｜阿比索斯</span>
+                    城市建於海獸骨骸與發光珊瑚上，海水被轉化為可呼吸的黏稠魔力網。<br>
+                    住民為鮫人與海妖，性情詭譎，深淵不流通金幣，只以記憶、壽命或情感來交易。
+                </div>
+                <div class="specialty-title">特產與價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>泣血鮫珠</strong>配戴後流淚如泣血般淒美絕倫，堪稱博取同情的最高境界。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>海妖留聲螺</strong>能紀錄並重現他人話語，帶輕微催眠效果，是借刀殺人的利器。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-4">
+                <div class="region-desc">
+                    <span class="region-title">黑曜大陸｜塔爾洛斯</span>
+                    大陸裂縫之下，永恆黃昏與極光壟罩，水銀河與黑森林矗立，物理法則混亂。<br>
+                    住民為夜魘族，生於陰影，俊美妖異。以恐懼與秘密為食，透過鏡子或陰影交流。
+                </div>
+                <div class="specialty-title">特產與價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>魅影脂粉</strong>一種能根據觀看者的內心渴望，微調配戴者容貌的化妝品。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>織夢薰香</strong>能入侵夢境，植入虛假的愛戀與執念，常被用來綁架聯姻對象。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-column block-5">
+                <div class="region-desc">
+                    <span class="region-title">幻森大陸｜維爾德林</span>
+                    整座大陸是活著的巨樹及真菌網路。植物會思考，花朵會捕食，土壤具記憶。<br>
+                    住民為植物與魔力融合的實體。無道德觀念，崇尚混亂，愛捉弄闖入者。
+                </div>
+                <div class="specialty-title">特產與價值</div>
+                <div class="specialty-list">
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>共生純白槿</strong>配戴者心緒平靜時花朵純白盛放；若心生惡意，花瓣便會變黑。</div>
+                    </div>
+                    <div class="specialty-item">
+                        <div class="icon-spacer"></div>
+                        <div class="specialty-text"><strong>吐真藤蔓花蜜</strong>無色無味，食用讓人變得口無遮攔，忍不住把內心話說出來。</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="map-section">
+        <img src="WorldMap.jpg" alt="耀日大陸與周邊世界地圖">
+    </div>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安羅西亞之春</title>
+    <style>
+        /* 基礎設定：深邃、優雅的暗黑宮廷風格 */
+        body {
+            /* 使用襯線字體，增加古典文學與史詩感 */
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115; /* 深夜般的極深灰藍色 */
+            color: #d8cbbc; /* 帶有羊皮紙質感的柔和米色文字 */
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            /* 讓背景有一個微微的中心漸層光暈，聚焦視覺 */
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+        }
+
+        /* 網站標題區塊 */
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a; /* 宴會廳般的華麗暗金色 */
+            margin-bottom: 30px;
+            letter-spacing: 4px; /* 讓標題字距拉開，更顯大氣 */
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; /* 確保與首頁高度一致 */
+        }
+
+        /* 上排橫向導覽列按鈕 */
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px; /* 按鈕之間的距離 */
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e; /* 上下加上金屬質感的細線 */
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none; /* 移除超連結預設的底線 */
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease; /* 讓滑鼠移過去的變色有平滑過渡效果 */
+        }
+
+        /* 滑鼠游標移到按鈕上的效果 */
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a; /* 發出金色微光 */
+        }
+
+        /* 敘述文字的排版區塊 */
+        .container {
+            max-width: 700px; /* 限制寬度讓閱讀眼睛不費力 */
+            margin: 0 auto;
+            padding: 0 30px 0px 30px;
+            text-align: justify; /* 左右對齊，讓段落邊緣像書本一樣整齊 */
+        }
+
+        p {
+            margin-bottom: 30px;
+            font-size: 1.15rem;
+        }
+
+        /* 針對最後一句話的特殊設計：營造致命的戲劇張力 */
+        .fatal-rose {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #cfa86a;
+            margin-top: 60px;
+            letter-spacing: 1px;
+            border-top: 1px dashed #4a3e2e; /* 上方加一條虛線分隔 */
+            padding-top: 40px;
+        }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html" class="active">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <p>安羅西亞王國已經迎來了長達三十年的無戰事時期。</p>
+        
+        <p>歷史學者在羊皮紙上寫下，這是一個被神明親吻的黃金年代，但只有身處權力漩渦中心的人才知道，當刀劍被收進劍鞘，真正的戰爭才在金碧輝煌的宴會廳裡拉開序幕。</p>
+        
+        <p>王都像一座巨大的溫室，空氣裡永遠有著香水與紅酒的甜香，這裡沒有正面的廝殺，只有微笑、毒藥與精心修飾的惡意。貴族們披著絲綢、踏著圓舞曲，在裙擺與酒杯交錯之間，用一句讚美毀掉一樁婚約，用一滴眼淚將政敵推入深淵。</p>
+        
+        <p>歡迎來到安羅西亞。</p>
+
+        <p class="fatal-rose">夜幕已然降臨，音樂正在奏響，而在這座充滿心機與誘惑的權力迷宮裡，最迷人的玫瑰往往淬著最致命的毒。</p>
+    </div>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>

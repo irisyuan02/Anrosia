@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安羅西亞王國 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 基礎設定與導覽列 (完全維持與首頁一致)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+            overflow-y: scroll;
+	    display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+        /* =========================================
+           2. 王國設定：手風琴折疊區塊 (Accordion)
+           ========================================= */
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .accordion-item {
+            background: rgba(25, 28, 36, 0.6);
+            border: 1px solid rgba(207, 168, 106, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .accordion-item:hover {
+            border-color: rgba(207, 168, 106, 0.6);
+        }
+
+        /* 點擊的標題條 */
+        .accordion-header {
+            background: linear-gradient(to right, rgba(31, 35, 41, 0.8), rgba(20, 22, 26, 0.8));
+            padding: 20px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .accordion-title {
+            font-size: 1.5rem;
+            color: #cfa86a;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .accordion-icon {
+            font-size: 1.2rem;
+            color: #8a8174;
+            transition: transform 0.4s ease; /* 旋轉動畫 */
+        }
+
+        /* 隱藏的內文區塊 */
+        .accordion-content {
+            max-height: 0; /* 預設高度為 0 (隱藏) */
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 30px;
+        }
+
+        /* 當此區塊被打開時的樣式 (這會透過下方的 JavaScript 觸發) */
+        .accordion-item.active .accordion-content {
+            padding: 30px; /* 打開時增加內距 */
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg); /* 圖示旋轉 180 度 */
+            color: #cfa86a;
+        }
+
+        /* =========================================
+           3. 內文排版樣式
+           ========================================= */
+        /* 大標題 (如：權力、信仰與金幣的同心圓) */
+        .section-title {
+            font-size: 1.3rem;
+            color: #fff;
+            border-bottom: 1px dashed rgba(207, 168, 106, 0.4);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        /* 小標題 (如：核心：太陽宮) */
+        .sub-title {
+            font-size: 1.1rem;
+            color: #e6cead;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .sub-title::before {
+            content: "⬩";
+            color: #cfa86a;
+            margin-right: 8px;
+        }
+
+        /* 段落文字 */
+        .desc-text {
+            color: #c4b5a2;
+            text-align: justify;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            padding-left: 20px; /* 縮排讓層次更分明 */
+        }
+
+        /* 重點文字強調 */
+        .highlight {
+            color: #cfa86a;
+            font-weight: bold;
+        }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html" class="active">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="content-container">
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">🔺 權力溫室 ⬩ 上城區</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <h3 class="section-title">安羅西亞王都：權力、信仰與金幣的同心圓</h3>
+                <p class="desc-text">王都的地形呈現嚴密的同心圓向外擴張，以太陽宮為絕對核心，將整座王都劃分為東、西、南、北四大勢力區塊。越靠近中心，權力的濃度越高；而越靠近邊緣，隱藏的危險與暗盤交易便越發猖獗。</p>
+
+                <div class="sub-title">核心：太陽宮</div>
+                <p class="desc-text">王室駐地與王國的政治心臟。整座宮殿以白大理石與純金打造，是安羅西亞統治權的絕對象徵。</p>
+                <p class="desc-text"><span class="highlight">中央主殿與王座廳：</span>決定國家預算、軍事調度與外交政策的密室。四大貴族的當主與國王在此進行最高級別的利益博弈。</p>
+                <p class="desc-text"><span class="highlight">水晶宴會廳：</span>全王國最大的社交場域。所有的國宴、王室賜婚、大型春季舞會皆在此舉行。這裡是貴族之間兵不血刃的社交戰場，每一次的座次安排與首舞對象，都牽動著王國的勢力平衡。</p>
+                <p class="desc-text"><span class="highlight">白星迴廊：</span>連接各宮殿的開放式長廊，被設計成毫無遮蔽物的直線。這是為了防止刺客，卻也讓所有在迴廊上的交談、私會或「刻意的偶遇」，都無可避免地落入周圍無數雙眼睛與耳目的監視之中。</p>
+
+                <div class="sub-title">西區：維雷家族（絕對機密與外交樞紐）</div>
+                <p class="desc-text">王都內鬧中取靜的特權區域。這裡守備極度森嚴，街道上看不見閒雜人等，空氣中透著不容侵犯的冷厲與威嚴。</p>
+                <p class="desc-text"><span class="highlight">芙蘿萊莊園：</span>被王室特許承認為「半主權外交區域」的頂級莊園。地上建築典雅清幽，是艾蓮瑪侯爵會客之處；地下室則是防護級別最高的「皇家秘密檔案館」，存放著足以摧毀任何貴族的致命黑歷史。</p>
+                <p class="desc-text"><span class="highlight">萬國使館：</span>所有外國使臣（包含法爾科亞、瓦爾剛等）在王都的駐地皆集中於此。這裡的一舉一動皆在維雷家族情報網的嚴密監控之下。</p>
+                <p class="desc-text"><span class="highlight">靜水別館：</span>處理非官方諜報交涉的秘密場所。表面上是頂級茶室，實際上水池底下的機關連接著地下水網，是情報人員的安全通道。</p>
+
+                <div class="sub-title">北區：西爾維斯家族（律法、神學與學術殿堂）</div>
+                <p class="desc-text">王都的信仰與道德高地。該區多為哥德式高塔，街道一塵不染，終日迴盪著鐘聲，給人極度壓抑的精神威壓。</p>
+                <p class="desc-text"><span class="highlight">荊棘高塔：</span>拒絕奢華裝飾的極簡莊園。沒有花園，只有精準的灌木迷宮。家族成員在此過著近乎苦行僧般的自律生活。</p>
+                <p class="desc-text"><span class="highlight">聖伊洛斯大教堂：</span>國教樞機院所在地。大主教在此布道，也是所有貴族舉行受洗與重要儀式的聖地。</p>
+                <p class="desc-text"><span class="highlight">皇家神學院：</span>全國貴族子弟的必修學院。表面教授神學與禮儀，實際上是貴族子弟建立派系、權力結盟的菁英修羅場。</p>
+                <p class="desc-text"><span class="highlight">異端審問塔與水牢：</span>隱藏在地下的無光建築。大法官在此進行「道德淨化」，底層更是執行暗中拷問與精神摧毀的殘酷刑場。</p>
+
+                <div class="sub-title">東區：莫里亞家族（跨國資本與情報黑市）</div>
+                <p class="desc-text">王都不夜城。這裡紙醉金迷、極度繁華，空氣中永遠混合著頂級香水、東方香料與金幣碰撞的氣味。</p>
+                <p class="desc-text"><span class="highlight">鎏金公館：</span>王都內最浮誇的私人宅邸。內部隨處可見海外奇珍異獸與藝術品，是向傳統貴族展示「財力即權力」的具體象徵。</p>
+                <p class="desc-text"><span class="highlight">繁星商港與內陸運河：</span>物流大動脈。每日吞吐無數商船，把控著全王都的物資定價權與奢侈品供應鏈。</p>
+                <p class="desc-text"><span class="highlight">金薔薇大劇院：</span>上流社會第二社交戰場。包下VIP包廂的主要目的並非看劇，而是進行私密會談或觀察政敵動向。</p>
+                <p class="desc-text"><span class="highlight">黑水地下拍賣會：</span>隱藏在劇院下方的錯綜地道。這裡不問血統只認金幣，從敵國軍備到致命毒藥，皆在此進行見不得光的交易。</p>
+
+                <div class="sub-title">南區：卡西爾家族（軍事防禦與鐵血紀律）</div>
+                <p class="desc-text">王都的物理防護罩。建築粗獷厚重，街道上多為穿著鎧甲的軍人，充滿肅殺感。</p>
+                <p class="desc-text"><span class="highlight">磐石要塞：</span>真正的軍事堡壘。外牆由抗魔石材砌成，卡西爾家族成員在此推演戰術，拒絕參與無謂的社交宴席。</p>
+                <p class="desc-text"><span class="highlight">近衛演武場與鐵衛營：</span>保護王都的常規軍與近衛騎士團駐地。每日迴盪著操練的嘶吼聲與兵器碰撞聲。</p>
+                <p class="desc-text"><span class="highlight">黑巖重犯監獄：</span>由重兵把守的軍事級監獄。專門關押試圖叛亂的軍閥、敵國高等間諜及危險份子。</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">🔻 暗流秩序 ⬩ 下城區與基礎設施</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <h3 class="section-title">外環下城區：工匠街與暗巷</h3>
+                <p class="desc-text">被排擠在權力核心之外的廣大外環區，是維持王都奢靡運轉的巨大代工廠。這裡沒有陽光普照的溫室，只有為了生存而建立的粗獷秩序與地下暗流。</p>
+
+                <div class="sub-title">紅磚工坊街（住商混合區）</div>
+                <p class="desc-text"><span class="highlight">風貌：</span>街道兩側是「樓下做生意、樓上過日子」的紅磚房。空氣裡永遠混雜著黑麥麵包、皮革保養油與金屬碎屑的氣味。</p>
+                <p class="desc-text"><span class="highlight">生態：</span>工匠與老闆白天對管家卑躬屈膝，夜晚二樓飯桌便成了最肆無忌憚的情報交流所。貴族佩劍的磨損、禮服的暗格，都是嘲弄上流社會的談資。</p>
+
+                <div class="sub-title">灰鳩町（勞動基層住宅區）</div>
+                <p class="desc-text"><span class="highlight">風貌：</span>建築密集且巷弄彎曲。社區中心有共用大水井與洗衣池。沒有雕花，只有曬衣繩、斑駁木門與流浪貓。</p>
+                <p class="desc-text"><span class="highlight">生態：</span>住著各大宅邸的僕役，是王都「最隱密的全視之眼」。貴族的密謀或虐待下人，隔天清晨就會在洗衣池旁傳遍整個下城區。</p>
+
+                <div class="sub-title">黑水暗巷與「老鼠尾巴」酒館</div>
+                <p class="desc-text"><span class="highlight">風貌：</span>隱藏在交界的三不管地帶。光線昏暗，地上有積水，連近衛軍走到街口也會自動轉身離開。</p>
+                <p class="desc-text"><span class="highlight">生態：</span>「老鼠尾巴」是最惡名昭彰的黑活集散地。裡頭坐著扒手、街頭打手，或是頂層商會派來發布匿名委託的黑手套。</p>
+
+                <h3 class="section-title">階級撕裂的基礎設施</h3>
+
+                <div class="sub-title">公共地標：時間與階級的具象化</div>
+                <p class="desc-text"><span class="highlight">晨光大鐘塔：</span>由樞機院控制。鐘聲標示著絕對權威，塔底廣場是發布政令與公開絞刑之地。</p>
+                <p class="desc-text"><span class="highlight">聖水瓶噴泉廣場：</span>展現最殘酷的水源階級。純淨地下水直通貴族莊園；次等水源供平民飲用；最後排入貧民窟的則是污水。</p>
+
+                <div class="sub-title">教育體系：知識的壟斷</div>
+                <p class="desc-text"><span class="highlight">皇家神學院：</span>專收貴族。不教技術，只教「如何制定規則與利用規則」。</p>
+                <p class="desc-text"><span class="highlight">晨星識字班：</span>教會經營，僅教基礎讀寫與教義。目的是培養「聽得懂軍令且絕對服從」的合格勞動力。</p>
+                <p class="desc-text"><span class="highlight">百工學徒公會：</span>下城區真正的學校。學徒需忍受打罵以換取一技之長，公會嚴格控制市場名額。</p>
+
+                <div class="sub-title">醫療體系：神聖治癒與陰暗手術</div>
+                <p class="desc-text"><span class="highlight">皇家療養院：</span>貴族專屬，使用微量治癒魔法與豪華套房。常被貴族用來「稱病」逃避社交風暴。</p>
+                <p class="desc-text"><span class="highlight">慈悲院（公立）：</span>環境擁擠血腥。缺乏高級藥材，多採用放血療法，死亡率極高。</p>
+                <p class="desc-text"><span class="highlight">烏鴉醫館與疫醫：</span>非法的地下診所。專門處理貴族墮胎、黑幫急救，或調配無色無味的慢性毒藥。</p>
+
+                <div class="sub-title">食衣住行：市井的粗獷與秘密</div>
+                <p class="desc-text"><span class="highlight">大銅鍋餐館：</span>不求精緻只求高熱量，是平民大聲吹牛划拳的解壓中心。</p>
+                <p class="desc-text"><span class="highlight">舊鴿廣場黑市：</span>常有僕役偷出的贓物，或破產貴族暗中當掉的高級禮服在此流通。</p>
+                <p class="desc-text"><span class="highlight">南城門驢車行：</span>車伕地位最低，卻聽過最多秘密。貴族在車內肆無忌憚談論的陰謀，最終都會流入情報網。</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">📅 虛假與狂歡 ⬩ 節慶活動</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <h3 class="section-title">四季盛典（王國四大官方活動）</h3>
+                <p class="desc-text">缺席任何一場官方盛典，都會被視為家族勢力衰退的象徵。</p>
+
+                <div class="sub-title">春初綻舞會（王室與樞機院聯合主辦）</div>
+                <p class="desc-text">社交季的開端，名義上慶祝春季復甦，實則為最高層級的相親與結盟大會。這是全年度「茶藝濃度」最高的一天。未婚男女透過花語試探心意，貴族千金私下用盡手段爭奪開場舞伴。收到最多花束的人，便是社交季的風雲人物。</p>
+
+                <div class="sub-title">仲夏白帆賽與海神祭（莫里亞家族主辦）</div>
+                <p class="desc-text">炫富大會與商業實力的火力展示。白天是貴族帆船競速，夜晚是水上煙火與狂歡。貴族穿著心機的「航海風」訂製服，甲板上充滿各種「暈船需要單獨照顧」的意外。這天也是平民少數能合法在街頭狂歡、潑水的日子。</p>
+
+                <div class="sub-title">秋霜皇家圍獵（卡西爾家族負責維安）</div>
+                <p class="desc-text">展現實力、解決私怨與密會的絕佳掩護。在郊外皇家獵場為期三天。獵物數量反映家族武力，而沒有衛兵的深林則是製造「意外身亡」或「英雄救美」的完美地點。夜晚的帳篷區更是私相授受的溫床。</p>
+
+                <div class="sub-title">凜冬冰璃晚宴（王室主辦）</div>
+                <p class="desc-text">氣氛最壓抑的封閉式晚宴，用於年度總結與確認明年權力分配。所有人會收起輕浮手段，轉而使用致命的政治籌碼。國王會在此宣布明年重要任命，沒有實權的附庸在此連呼吸都要小心翼翼。</p>
+
+                <h3 class="section-title">年度活動（不可控的變數）</h3>
+                
+                <div class="sub-title">萬國星穹博覽會（每年初秋）</div>
+                <p class="desc-text">各國最新技術與異國文化的大型展覽，是一場沒有硝煙的國力展示戰。展覽期間，商業間諜、竊盜與技術抄襲層出不窮，暗巷情報交易價格會翻上三倍。</p>
+
+                <div class="sub-title">金蟾蜍狂歡節（冬末春初）</div>
+                <p class="desc-text">全城面具狂歡，合法「失序之夜」。規則是「戴上面具，階級歸零」。貴族假扮平民，平民假扮國王。沒有道德綁架，所有私怨與情慾都在面具下爆發，天亮後一切「不准被追究」。</p>
+
+                <h3 class="section-title">月度活動（虛偽的日常運作）</h3>
+
+                <div class="sub-title">聖日施食與賜福（每月末）</div>
+                <p class="desc-text">貴族的超級公關秀。貴族穿著「看似樸素實則昂貴」的服飾，在畫師面前流淚發放麵包給孤兒。平民則配合演戲，並在私底下給這場作秀打分數，活動一結束貴族便會立刻用手帕瘋狂擦手。</p>
+
+                <div class="sub-title">弦月黑市開市日（無月光之夜）</div>
+                <p class="desc-text">王國陰暗面的定期清倉。拍賣品包括被流放者的寶物、致命毒藥、政敵把柄甚至非法奴隸。進場需特殊邀請函，買賣雙方皆隱藏身份，是高層權力洗牌的實體交易點。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleAccordion(element) {
+            // 找到被點擊的這個區塊
+            var parentItem = element.parentElement;
+            var content = element.nextElementSibling;
+            
+            // 判斷這個區塊目前是否是打開的
+            var isActive = parentItem.classList.contains("active");
+
+            // 先把所有的區塊都關閉 (如果你想讓它們可以同時打開多個，把這三行刪掉即可)
+            var allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(function(item) {
+                item.classList.remove("active");
+                item.querySelector('.accordion-content').style.maxHeight = null;
+            });
+
+            // 如果原本是關閉的，就把它打開
+            if (!isActive) {
+                parentItem.classList.add("active");
+                // 讓內容的高度變成它實際內容該有的高度
+                content.style.maxHeight = content.scrollHeight + 60 + "px"; // 60是padding的高度
+            }
+        }
+    </script>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關於作者 - 安羅西亞之春</title>
+    <style>
+        /* =========================================
+           1. 繼承首頁的基礎設定與導覽列 (完全維持一致)
+           ========================================= */
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif TC', 'PMingLiU', serif; 
+            background-color: #0f1115;
+            color: #d8cbbc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at center top, #1f2329 0%, #0f1115 100%);
+            min-height: 100vh;
+            overflow-y: scroll; /* 強制顯示垂直滾動條，消除頁面跳動 */
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #cfa86a;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-top: 0; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-bottom: 50px;
+            border-top: 1px solid #4a3e2e;
+            border-bottom: 1px solid #4a3e2e;
+            padding: 15px 0;
+        }
+
+        nav a {
+            color: #d8cbbc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            text-shadow: 0 0 10px #cfa86a;
+        }
+
+        /* =========================================
+           2. 作者名片卡排版 (Profile Card)
+           ========================================= */
+        .author-container {
+            max-width: 500px; /* 限制寬度讓版面更集中、精緻 */
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .author-card {
+            background: rgba(25, 28, 36, 0.6);
+            border: 1px solid rgba(207, 168, 106, 0.3);
+            border-radius: 12px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+
+        .author-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%; /* 讓大頭貼變成正圓形 */
+            object-fit: cover; /* 確保圖片不變形 */
+            border: 3px solid #cfa86a; /* 加上金框 */
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(207, 168, 106, 0.2); /* 頭像微微發光 */
+        }
+
+        .author-name {
+            color: #cfa86a;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+        }
+
+        .author-desc {
+            color: #c4b5a2;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* =========================================
+           3. 連結按鈕清單
+           ========================================= */
+        .author-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* 按鈕之間的間距 */
+        }
+
+        .link-btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            padding: 15px 20px;
+            border: 1px solid rgba(207, 168, 106, 0.4);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background: rgba(207, 168, 106, 0.15); /* 滑鼠移過去底色變亮 */
+            border-color: #cfa86a;
+            transform: translateY(-3px); /* 按鈕微微往上浮 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .link-title {
+            color: #e6cead;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .link-btn:hover .link-title {
+            color: #fff; /* 滑鼠移過去字變純白 */
+        }
+
+        .link-note {
+            color: #8a8174;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+	/* 頁尾英文警語的排版 */
+        .footer-warning {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+	    width: 100%; /* 確保頁尾橫跨整個螢幕寬度 */
+            border-top: 1px solid rgba(207, 168, 106, 0.2); /* 上方加一條淡淡的金線隔開 */
+            background-color: rgba(0, 0, 0, 0.3); /* 微微變暗的底色 */
+        }
+
+        .footer-warning p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 英文建議用現代無襯線字體，比較好讀 */
+            color: #8a8174; /* 偏暗的灰金色，不會太搶眼 */
+            font-size: 0.85rem; /* 字體稍微縮小 */
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>安羅西亞之春</h1>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="world.html">世界</a>
+            <a href="solaria.html">耀日大陸</a>
+            <a href="anrosia.html">安羅西亞王國</a>
+            <a href="factions.html">王室與貴族</a>
+            <a href="characters.html">主要角色</a>
+            <a href="author.html" class="active">關於作者</a>
+        </nav>
+    </header>
+
+    <div class="author-container">
+        <div class="author-card">
+            <img src="author.jpg" alt="鳶" class="author-avatar">
+            
+            <h2 class="author-name">鳶</h2>
+            <p class="author-desc">社恐 I 人，從沒想過有天會創角創到開始寫網站。</p>
+
+            <div class="author-links">
+                <a href="https://abr.ge/haric0" target="_blank" class="link-btn">
+                    <span class="link-title">卿卿我我</span>
+                    <span class="link-note">（孩子們的家）</span>
+                </a>
+                
+                <a href="https://www.threads.com/@irisyuan02" target="_blank" class="link-btn">
+                    <span class="link-title">Threads</span>
+                    <span class="link-note">（僅作私訊用途）</span>
+                </a>
+                
+                <a href="https://www.plurk.com/irisyuan02" target="_blank" class="link-btn">
+                    <span class="link-title">噗浪</span>
+                    <span class="link-note">（可能會發一些創角或日常廢文）</span>
+                </a>
+                
+                <a href="https://www.youtube.com/@Irisyuan02" target="_blank" class="link-btn">
+                    <span class="link-title">Youtube</span>
+                    <span class="link-note">（角色曲集中處）</span>
+                </a>
+            </div>
+        </div>
+    </div>
+<div class="footer-warning">
+        <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
+    </div>
+</body>
+</html>
