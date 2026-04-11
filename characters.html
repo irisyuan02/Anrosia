@@ -88,6 +88,11 @@
             width: 100%;
             height: auto;
             display: block;
+
+	    /* 👇 加上這些防護裝甲 👇 */
+            -webkit-user-drag: none; /* 禁止滑鼠拖曳圖片到桌面 */
+            user-select: none; /* 禁止滑鼠反白選取 */
+            pointer-events: none; /* 讓圖片徹底無視滑鼠點擊 (這樣連長按叫出選單的手機用戶也能防) */
         }
 
         .character-info {
@@ -248,5 +253,21 @@
 <div class="footer-warning">
         <p>Notice: Using browser built-in translation features may cause layout shifts or text overflow. For the best visual experience, please view in the original language.<br>© 2026 irisyuan02. All rights reserved. Visual elements on this site are assisted by AI.</p>
     </div>
+    <script>
+        // 鎖定滑鼠右鍵
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 鎖定特定鍵盤快捷鍵 (例如 F12 開發者工具、Ctrl+S 存檔等)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+               (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+               (e.ctrlKey && e.key === 's') || 
+               (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
